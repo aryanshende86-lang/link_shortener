@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card shadow-sm p-4 mb-4 bg-white rounded">
+    <div class="text-center mb-4">
+        <h1 class="display-6 fw-bold text-dark">Link Shortener Web App</h1>
+        <p class="text-muted">Enter a long web path below to generate a clean 6-character short link.</p>
+    </div>
+
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
+            <div>
+                <strong>Validation Error:</strong> {{ error }}
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+    {% if short_link %}
+        <div class="alert alert-success p-3 rounded mb-4" role="alert">
+            <h4 class="alert-heading h5 fw-bold">🎉 Link Generated Successfully!</h4>
+            <p class="mb-2">Your shortened redirect path is ready to share:</p>
+            <div class="input-group">
+                <input type="text" class="form-control bg-white" value="{{ short_link }}" readonly id="shortLinkUrl">
+                <a href="{{ short_link }}" target="_blank" class="btn btn-success">Open Link ↗</a>
+            </div>
+        </div>
+    {% endif %}
+
+    <form action="/shorten" method="POST" class="needs-validation">
+        <div class="mb-3">
+            <label for="long_url" class="form-label fw-semibold text-secondary">Paste Long URL Here:</label>
+            <input type="text" class="form-control form-control-lg text-dark" id="long_url" name="long_url" 
+                   placeholder="https://example.com/very/long/path/parameters" 
+                   value="{{ previous_value if previous_value else '' }}" required>
+            <div class="form-text text-muted">The link must be active and explicitly start with http:// or https://.</div>
+        </div>
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm">Generate Short Link</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
